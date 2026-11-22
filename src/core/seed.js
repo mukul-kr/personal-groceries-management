@@ -33,7 +33,7 @@ export function mergeSeed(existing, builtin) {
 
 export function defaultSettings() {
   return { id: 'settings', planned: [], skipped: [], manualShop: [], warnDays: 3,
-    searchProvider: 'blinkit', lastBackupAt: null, schemaVersion: SCHEMA_VERSION };
+    shopApps: ['blinkit', 'zepto', 'instamart', 'flipkart', 'amazon'], lastBackupAt: null, schemaVersion: SCHEMA_VERSION };
 }
 
 export function freshState(items, meals) {

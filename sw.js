@@ -1,6 +1,6 @@
 // Offline support: app files are cached on install and served cache-first.
 // Bump VERSION on every deploy so phones pick up the new files.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = `solo-kitchen-${VERSION}`;
 const FILES = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest',

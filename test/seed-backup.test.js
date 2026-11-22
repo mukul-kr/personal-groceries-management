@@ -29,6 +29,7 @@ test('freshState has settings defaults and no stock', () => {
   assert.equal(s.settings.id, 'settings');
   assert.equal(s.settings.warnDays, 3);
   assert.equal(s.settings.schemaVersion, SCHEMA_VERSION);
+  assert.deepEqual(s.settings.shopApps, ['blinkit', 'zepto', 'instamart', 'flipkart', 'amazon']);
 });
 
 const state = () => ({

@@ -72,7 +72,14 @@ Bottom bar: **Today · Cook · ＋ · Stock · Shop**. Settings is reached from 
 **Shop**
 - Two sections, each with a count: **Order online** and **Pick up from store**.
 - Each row: item + usual pack + reason pill (`out in Nd`, `low`, `plan`, `+N meals`).
-- Online rows have a search link (Blinkit by default; configurable). The URL format must be verified before shipping; if it can't be verified, drop the link and keep Copy list.
+- Online rows have one **Find ↗** button. It opens a picker listing the shopping apps you've switched on, so you can compare prices and order from whichever is cheaper:
+  - Blinkit (`blinkit.com/s/?q=`)
+  - Zepto (`zeptonow.com/search?query=`)
+  - Swiggy Instamart (`swiggy.com/instamart/search?query=`)
+  - Flipkart Minutes (`flipkart.com/search?q=…&marketplace=HYPERLOCAL`)
+  - Amazon Now (`amazon.in/tez/browse/search?searchKeyword=`)
+
+  With only one app switched on, the button links straight to it. Settings → "Apps you order from" toggles them (at least one stays on).
 - **Copy list** copies the online section as text.
 - **Bought N** moves ticked items into stock at their usual packs, with Undo.
 
@@ -147,7 +154,7 @@ An item is added when any of these holds:
 | `purchases` | `id, itemId, qty, boughtAt, expiresAt, state (sealed\|opened\|frozen)` |
 | `meals` | `id, name, minutes, protein, tags[], steps[], ingredients [{itemId, qty, optional}], edited (bool)` |
 | `history` | `id, at, type (bought\|cooked\|used\|wasted\|adjusted\|froze\|opened), itemId?, mealId?, qty?, purchaseId?` |
-| `settings` | `planned[], skipped[], warnDays, searchProvider, lastBackupAt, schemaVersion` |
+| `settings` | `planned[], skipped[], manualShop[], warnDays, shopApps[], lastBackupAt, schemaVersion` |
 
 - **Seeding:** the built-in catalog (74 items) and meals (118, with exact amounts) load on first launch. On later versions, new ids are added and built-ins are updated only where `edited` is false.
 - **Schema version:** each change ships a migration. The DB never opens with an unknown newer version.

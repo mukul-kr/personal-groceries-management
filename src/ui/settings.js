@@ -3,7 +3,7 @@ import { makeBackup, parseBackup } from '../core/backup.js';
 import * as cmd from '../core/commands.js';
 import { categories } from '../data/catalog.js';
 import { esc, qty } from './components.js';
-import { PROVIDERS } from './shop.js';
+import { APPS, enabledApps } from './shop.js';
 
 export function view(ctx) {
   const ui = (ctx.ui.settings ||= { q: '' });
@@ -21,12 +21,15 @@ export function view(ctx) {
       <input id="import-file" type="file" accept="application/json,.json" data-change="settings.import" hidden>
     </div>
     <div class="sec">Shopping</div>
-    <div class="card grid2">
-      <label class="field">Warn me before running out<select id="warn" data-change="settings.warn">
-        ${[1, 2, 3, 4, 5, 7].map(n => `<option value="${n}" ${s.warnDays === n ? 'selected' : ''}>${n} day${n > 1 ? 's' : ''}</option>`).join('')}</select></label>
-      <label class="field">Search buttons open<select id="provider" data-change="settings.provider">
-        ${Object.entries(PROVIDERS).map(([k, p]) => `<option value="${k}" ${s.searchProvider === k ? 'selected' : ''}>${p.name}</option>`).join('')}</select></label>
-    </div>
+    <div class="card"><label class="field">Warn me before running out<select id="warn" data-change="settings.warn">
+        ${[1, 2, 3, 4, 5, 7].map(n => `<option value="${n}" ${s.warnDays === n ? 'selected' : ''}>${n} day${n > 1 ? 's' : ''}</option>`).join('')}</select></label></div>
+    <div class="sec">Apps you order from</div>
+    <div class="list">${Object.entries(APPS).map(([k, a]) => {
+      const on = enabledApps(s).includes(k);
+      return `<button class="row" data-act="settings.app" data-k="${k}" aria-pressed="${on}">
+        <span class="check ${on ? 'on' : ''}" aria-hidden="true">${on ? '✓' : ''}</span><span class="grow">${a.name}</span></button>`;
+    }).join('')}</div>
+    <div class="muted small" style="margin-top:-6px">Shop's “Find” button lists these, so you can compare prices.</div>
     <div class="sec">Items</div>
     <input class="search" id="settings-q" type="search" placeholder="Search items" value="${esc(ui.q)}" data-input="settings.search" autocomplete="off">
     <div class="list">${items.map(i => `<button class="row" data-act="settings.editItem" data-id="${esc(i.id)}">
@@ -71,7 +74,13 @@ function download(name, text) {
 export const actions = {
   search: (el, ctx) => { ctx.ui.settings.q = el.value; ctx.render(); },
   warn: (el, ctx) => ctx.run(cmd.setSettings, { warnDays: +el.value }, null),
-  provider: (el, ctx) => ctx.run(cmd.setSettings, { searchProvider: el.value }, null),
+  app: (el, ctx) => {
+    const on = enabledApps(ctx.state.settings);
+    const k = el.dataset.k;
+    const next = on.includes(k) ? on.filter(x => x !== k) : Object.keys(APPS).filter(x => x === k || on.includes(x));
+    if (!next.length) return ctx.toast('Keep at least one app.');
+    ctx.run(cmd.setSettings, { shopApps: next }, null);
+  },
   editItem: (el, ctx) => { ctx.ui.editId = el.dataset.id; ctx.openSheet(itemSheet); },
   saveItem: (el, ctx) => {
     const i = ctx.itemsById[ctx.ui.editId];
