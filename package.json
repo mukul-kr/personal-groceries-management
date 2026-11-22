@@ -1,0 +1,6 @@
+{
+  "name": "solo-kitchen",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" }
+}

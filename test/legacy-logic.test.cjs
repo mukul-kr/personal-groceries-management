@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const L = require('../logic.js');
-const DATA = require('../data.js');
+const L = require('../logic.cjs');
+const DATA = require('../data.cjs');
 
 const ING = [
   { id: 'salt', cat: 'basics' },
