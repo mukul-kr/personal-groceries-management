@@ -52,6 +52,14 @@ test('buildShoppingList collects reasons with usual packs and sources', () => {
   assert.equal(by.onion, undefined);
 });
 
+test('items you never bought are not "low", even with a running-low level', () => {
+  const s = base();
+  s.items.push(item('sattu', { lowAt: 100 }));
+  assert.equal(buildShoppingList(s, now).find(l => l.itemId === 'sattu'), undefined);
+  s.history.push(H('bought', 'sattu', 500, 40), H('used', 'sattu', 500, 1));
+  assert.deepEqual(buildShoppingList(s, now).find(l => l.itemId === 'sattu').reasons, ['low']);
+});
+
 test('one row per item even with several reasons', () => {
   const s = base();
   s.meals[0].ingredients.push({ itemId: 'curd', qty: 200, optional: false });

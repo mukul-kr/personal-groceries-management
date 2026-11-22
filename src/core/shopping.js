@@ -20,7 +20,7 @@ export function buildShoppingList(state, now) {
     const left = daysToRunOut(stock, usageRate(state.history, item.id, now));
     const hasHistory = left != null;
     if (hasHistory && left <= warnDays) add(item.id, `out in ${Math.max(0, Math.floor(left))}d`);
-    else if (stock <= item.lowAt && (stock > 0 || state.history.some(h => h.itemId === item.id) || item.lowAt > 0)) add(item.id, 'low');
+    else if (stock <= item.lowAt && (stock > 0 || state.history.some(h => h.itemId === item.id))) add(item.id, 'low');
   }
   for (const mealId of planned) {
     const meal = state.meals.find(m => m.id === mealId);

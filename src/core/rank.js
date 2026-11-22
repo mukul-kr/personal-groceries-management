@@ -20,7 +20,7 @@ export function rankMeals(state, now) {
       .sort((a, b) => b.bonus - a.bonus);
     let score = urgent.reduce((s, u) => s + u.bonus, 0);
     const reasons = urgent.slice(0, 2).map(u =>
-      `Uses ${(itemsById[u.itemId]?.name || u.itemId).toLowerCase()} (${formatDaysLeft(u.daysLeft)})`);
+      `Uses ${(itemsById[u.itemId]?.name || u.itemId).replace(/\s*\(.*\)$/, '').toLowerCase()} (${formatDaysLeft(u.daysLeft)})`);
 
     if (planned.includes(meal.id)) { score += 2; reasons.push('Planned'); }
 
