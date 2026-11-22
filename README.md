@@ -1,17 +1,30 @@
 # Solo Kitchen
 
-Open `index.html` in a browser. No install, no server.
+A home-screen app for one person cooking in India: what to cook next (using up what's about to go bad), what's in stock, and what to buy. Everything is stored on the phone. There's no account and no server.
 
-- **Cook**: meals you can make with what you have. Filter by time, protein and style, or tap *Surprise me*. *Not for me* hides a meal.
-- **My kitchen**: tick what you have. It's saved in this browser.
-- **Shop**: *Best things to buy next* ranks items by how many new meals each one unlocks. *Shopping list* collects what's missing for the meals you planned.
+Live: https://mukul-kr.github.io/personal-groceries-management/
 
-## Adding things
+## Install on iPhone
 
-Everything is in `data.js`. Add an ingredient to `ingredients`, or a meal with `r(...)`. The format is explained at the top of that file. Then run:
+1. Open the link above in **Safari**.
+2. Tap **Share**, then **Add to Home Screen**.
+3. Open it from the home-screen icon. That copy keeps its own data and works offline.
+
+Back up from **Settings → Export backup** now and then (save to Files or iCloud Drive).
+
+## Develop
 
 ```
-node --test
+python3 -m http.server 8080        # then open http://localhost:8080
+open "http://localhost:8080/?demo"  # sample kitchen in memory, nothing saved
+npm test                            # node --test, no dependencies
 ```
 
-It catches typos in ingredient ids and duplicate meals. `logic.js` holds the matching logic (pure functions, tested in `test/`). `app.js` is the UI.
+| Path | What's there |
+|---|---|
+| `src/core/` | Pure logic: expiry, stock, ranking, forecast, shopping list, commands (as undoable change sets), seed, backup. Fully tested. |
+| `src/data/` | `catalog.js` (items: pack size, shelf life, source…) and `meals.js` (118 meals). Edit and run `npm test`. |
+| `src/store/db.js` | The only IndexedDB code. |
+| `src/ui/` | Screens: today, cook (+ meal), stock, shop, settings, plus (＋ sheet). |
+| `sw.js` | Offline cache. **Bump `VERSION` on each deploy.** |
+| `docs/superpowers/` | Design spec and implementation plan. |
